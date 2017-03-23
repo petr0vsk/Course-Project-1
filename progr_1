@@ -66,7 +66,8 @@ ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +
 # 5-minute interval contains the maximum number of steps   
 print(max.steps)
 # ====================================== 3 =====================
-# ------ Solve problem with missing value ------------------------
+# --Solve problem with missing value ------------------------
+# --All of the missing values are replased with mean value for that 5-minute interval -----
 # how many missing value?
 sum(is.na(steps.raw$steps)) 
 #
@@ -84,23 +85,23 @@ steps.raw.clear$steps <- unlist(steps.raw.clear$steps)
 # ================================ 7 ============================
 # ---- Histogram of the total number of steps taken each day ---
 # ---- What is mean total number of steps taken per day? ----
-mean.steps.per.day.clear <- steps.raw.clear %>%
+sum.steps.per.day.clear <- steps.raw.clear %>%
     group_by(date) %>%
     summarise_each(funs( sum(steps) ), steps = steps) 
    
 
-mn <- round(mean(mean.steps.per.day.clear$steps),2)
-md <- median(mean.steps.per.day.clear$steps)
+mn <- round(mean(sum.steps.per.day.clear$steps),2)
+md <- median(sum.steps.per.day.clear$steps)
 # - - - - - - - - - -plot histogramm  - - - - - - - - - - -
 plot.new()
-hist(mean.steps.per.day.clear$steps, main = "Total number of steps taken each day after missing values are imputed", 
+hist(sum.steps.per.day.clear$steps, main = "Total number of steps taken each day after missing values are imputed", 
      breaks = 61,
      xlab = "Steps per day", ylab = "Frequency",
      col="black",
      border="white")
 box(bty="l")
 grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
-rug(mean.steps.per.day.clear$steps)
+rug(sum.steps.per.day.clear$steps)
 
 # ------ mean and median ---
 print(paste0("after missing values are imputed mean = ", mn))
@@ -108,23 +109,38 @@ print(paste0("after missing values are imputed median = ", md))
 
 # - ----- Are there differences in activity patterns between weekdays and weekends? ---
 steps.raw.clear$date <- as.Date(steps.raw.clear$date)
+# add column with 'weekday' or 'weekend'
 for(i in 1:length(steps.raw.clear$steps))   {
       if( weekdays(steps.raw.clear$date[i]) %in% c("Saturday", "Sunday")  )   {
-        steps.raw.clear$weekdays[i] <-  "weekday"     
+        steps.raw.clear$weekday[i] <-  "weekend"     
                     }#if..
         else {
-            steps.raw.clear$weekdays[i] <-  "weekend"
+            steps.raw.clear$weekday[i] <-  "weekday"
             #print("weekend")    
             
         } 
 }#for..
-mean.steps.raw.clear <- steps.raw.clear %>%
-    group_by(date) %>%
-    summarise_each(funs( sum(steps) ), steps = steps) 
-plot.new()
-ggplot(steps.raw.clear, aes(interval, steps)) + geom_line() + facet_grid(weekdays ~ .) + 
-    xlab("5-minute interval") + ylab("Number of steps")
 
+# -??- Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends --
+mean.steps.raw.clear <- steps.raw.clear %>%
+    group_by(interval,weekday) %>%
+    summarise_each(funs( mean(steps) ), steps = steps, weekday = weekday) 
+plot.new()
+ggplot(mean.steps.raw.clear, aes(interval, steps)) + geom_line() + facet_grid(weekday ~ .) + 
+    xlab("5-minute interval") + ylab("Number of steps")
+plot.new()
+ggplot(mean.steps.raw.clear, aes(x=interval, y=steps)) +
+    geom_line(colour = "darkblue") +  
+    facet_grid(weekday ~ .) + 
+    geom_point(size=0.7) +
+    scale_x_continuous(name = "Time interval (by 5-minyt step)", limits = c(0,tail(mean.steps.raw.clear$interval, n=1)), breaks = daily.activity.average.with.NA$interval[brake.vec])  +
+    scale_y_continuous(name = "Time series plot of the average number of steps taken", limits = c(0,max(mean.steps.raw.clear$steps))) +
+    ggtitle("Mean total number of steps taken per day") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    #geom_vline(xintercept=max.steps$interval, linetype = 2, color="red") +
+    #geom_text(aes(max.steps$interval, label="\ninterval = 853;   steps = 206.2", y=50), angle=90, color="red") +
+    theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
+    stat_smooth(colour="green", na.rm=TRUE) 
 
 
 
