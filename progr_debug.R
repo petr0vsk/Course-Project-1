@@ -1,4 +1,4 @@
-�##clear memory
+##clear memory
 rm(list=ls())
 library(tidyr)
 library(dplyr)
