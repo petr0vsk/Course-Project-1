@@ -16,25 +16,25 @@ steps.raw <- read.csv("activity.csv",  header = TRUE)
 str(steps.raw)
 # ================================ 2. What is mean total number of steps taken per day? =============
 # ---- What is mean total number of steps taken per day? ----
-mean.steps.per.day <- steps.raw %>%
+sum.steps.per.day <- steps.raw %>%
     group_by(date) %>%
     summarise_each(funs( sum(steps, na.rm = T) ), steps = steps) %>%
     as.data.frame()
 # ---- Histogram of the total number of steps taken each day -------------
 plot.new()
-hist(mean.steps.per.day$steps, main = "Total number of steps taken each day with NA", 
+hist(sum.steps.per.day$steps, main = "Total number of steps taken each day with NA", 
      breaks = 61,
      xlab = "Steps per day", ylab = "Frequency",
      col="black",
      border="white")
 box(bty="l")
 grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
-rug(mean.steps.per.day$steps)
+rug(sum.steps.per.day$steps)
 # ------ Calculate and report the mean and median total number of steps taken per day ---
-mn <- round(mean(mean.steps.per.day$steps, na.rm = T),2)
-md <- median(mean.steps.per.day$steps, na.rm = TRUE)
-print(paste0("mean = ", mn))
-print(paste0("median = ", md))
+mn.NA <- round(mean(sum.steps.per.day$steps, na.rm = T),2)
+md.NA <- median(sum.steps.per.day$steps, na.rm = TRUE)
+print(paste0("mean.with.NA = ", mn.NA))
+print(paste0("median.with.NA = ", md.NA))
 
 # ==3. What is the average daily activity pattern? ==========================
 daily.activity.average.with.NA <- steps.raw %>%
@@ -57,7 +57,7 @@ ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +
     theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
     stat_smooth(colour="green", method = 'loess', na.rm=TRUE) 
 # 5-minute interval contains the maximum number of steps   
-print(max.steps)
+print(max.steps$interval)
 # ==== 4. Imputing missing values  =====================
 # --All of the missing values are replased with mean value for that 5-minute interval -----
 # Calculate and report the total number of missing values in the dataset
@@ -79,12 +79,15 @@ steps.raw.clear$steps <- unlist(steps.raw.clear$steps)
 sum.steps.per.day.clear <- steps.raw.clear %>%
     group_by(date) %>%
     summarise_each(funs( sum(steps) ), steps = steps) 
-   
-
+    
 mn <- round(mean(sum.steps.per.day.clear$steps),2)
 md <- median(sum.steps.per.day.clear$steps)
-# ---- Histogram of the total number of steps taken each day ---
+# ---- Histogram of the total number of steps taken each day without NA ---
+
+
 plot.new()
+par(mfrow= c(2,1))
+# - - - - - - - - - - without NA ????????? mean or sum? Добавить mean and median в легенду
 hist(sum.steps.per.day.clear$steps, main = "Total number of steps taken each day after missing values are imputed", 
      breaks = 61,
      xlab = "Steps per day", ylab = "Frequency",
@@ -93,8 +96,19 @@ hist(sum.steps.per.day.clear$steps, main = "Total number of steps taken each day
 box(bty="l")
 grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
 rug(sum.steps.per.day.clear$steps)
+#  - - - - -with NA ????????? mean or sum?
+hist(sum.steps.per.day$steps, main = "Total number of steps taken each day with NA", 
+     breaks = 61,
+     xlab = "Steps per day", ylab = "Frequency",
+     col="black",
+     border="white")
+box(bty="l")
+grid(nx=NA,ny=NULL,lty=1,lwd=1,col="gray")
+rug(sum.steps.per.day$steps)
 
 # ------ mean and median ---
+print(paste0("mean.with.NA = ", mn.NA))
+print(paste0("median.with.NA = ", md.NA))
 print(paste0("after missing values are imputed mean = ", mn))
 print(paste0("after missing values are imputed median = ", md))
 
