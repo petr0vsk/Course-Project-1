@@ -1,0 +1,6 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+author: "petr0vsk"
+date: "March 21, 2017"
+output: html_document
+---
