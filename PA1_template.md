@@ -57,16 +57,17 @@ summarise_each(funs(mean(steps, na.rm = TRUE)), steps = steps)
 ```
 Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) 
 and the average number of steps taken, averaged across all days (y-axis)
-```{r echo=TRUE}
-brake.vec <- as.vector(seq(1,288,by=12))
-ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +
-    geom_line(colour = "darkblue") +                                                                            geom_point(size=0.7) +
-    scale_x_continuous(name = "Time interval (by 5-minyt step)", limits = c(0,tail(daily.activity.average.with.NA$interval, n=1)), breaks = daily.activity.average.with.NA$interval[brake.vec])  +
-    scale_y_continuous(name = "Time series plot of the average number of steps taken", limits = c(0,max(daily.activity.average.with.NA$steps))) +
-    ggtitle("Mean total number of steps taken per day") +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +
-stat_smooth(colour="green", method = 'loess', na.rm=TRUE) 
+```r
+brake.vec <- as.vector(seq(1,288,by=12))  
+ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +  
+    geom_line(colour = "darkblue") +                                                                              geom_point(size=0.7) +  
+    scale_x_continuous(name = "Time interval (by 5-minyt step)", limits = c(0,tail(daily.activity.average.with.NA$interval,   n=1)), breaks = daily.activity.average.with.NA$interval[brake.vec])  +  
+    scale_y_continuous(name = "Time series plot of the average number of steps taken", limits =   c(0,max(daily.activity.average.with.NA$steps))) +  
+    ggtitle("Mean total number of steps taken per day") +  
+    theme(plot.title = element_text(hjust = 0.5)) +  
+    theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +  
+stat_smooth(colour="green", method = 'loess', na.rm=TRUE)   
 ```
+![plot of chunk unnamed-chunk-2](figure/002.png)   
 
 
