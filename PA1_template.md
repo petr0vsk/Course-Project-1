@@ -77,7 +77,6 @@ max.steps <- daily.activity.average.with.NA[which.max(daily.activity.average.wit
 print(paste0("5-minute interval, contains the maximum number of steps is ", max.steps))
 ```
 > [1] "5-minute interval, contains the maximum number of steps is 835"             
-> [2] "5-minute interval, contains the maximum number of steps is 206.169811320755"
 
 ## 4. Imputing missing values  
 All of the missing values are replased with mean value for that 5-minute interval  
