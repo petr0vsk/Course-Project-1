@@ -68,6 +68,6 @@ ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +
     theme(axis.text.x = element_text(angle=30, hjust=1, vjust=1)) +  
 stat_smooth(colour="green", method = 'loess', na.rm=TRUE)   
 ```
-![plot of chunk unnamed-chunk-2](figure/002.png)   
+![plot of chunk unnamed-chunk-2](figure/02.png)   
 
 
