@@ -4,7 +4,7 @@ Reproducible Research: Peer Assessment 1 | Aleksander Petrovskii | March 21, 201
 
 
 # Reproducible Research: Peer Assessment 1
-*** 
+
 ## 1. Loading and preprocessing the data
 
 ```r
@@ -33,4 +33,12 @@ as.data.frame()
 Histogram of the total number of steps taken each day
 
 ![plot of chunk unnamed-chunk-1](figure/01.png) 
+
+Calculate and report the mean and median total number of steps taken per day
+```r
+mn.NA <- round(mean(sum.steps.per.day.withNA$steps, na.rm = T),2)
+md.NA <- median(sum.steps.per.day.withNA$steps, na.rm = TRUE)
+print(paste0("mean.with.NA = ", mn.NA))
+print(paste0("median.with.NA = ", md.NA))
+```
 
