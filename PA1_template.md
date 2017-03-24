@@ -60,7 +60,8 @@ and the average number of steps taken, averaged across all days (y-axis)
 ```r
 brake.vec <- as.vector(seq(1,288,by=12))  
 ggplot(daily.activity.average.with.NA, aes(x=interval, y=steps)) +  
-    geom_line(colour = "darkblue") +                                                                                      geom_point(size=0.7) +    
+    geom_line(colour = "darkblue") +
+    geom_point(size=0.7) +    
     scale_x_continuous(name = "Time interval (by 5-minyt step)", limits = c(0,tail(daily.activity.average.with.NA$interval,   n=1)), breaks = daily.activity.average.with.NA$interval[brake.vec])  +  
     scale_y_continuous(name = "Time series plot of the average number of steps taken", limits =   c(0,max(daily.activity.average.with.NA$steps))) +  
     ggtitle("Mean total number of steps taken per day") +  
