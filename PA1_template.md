@@ -1,4 +1,5 @@
-title 	author 	date 	output
+title |	author 	date 	output
+------|
 Reproducible Research: Peer Assessment 1
 	
 Aleksander Petrovskii aka petr0vsk
